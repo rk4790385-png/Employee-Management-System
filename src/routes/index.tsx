@@ -26,10 +26,10 @@ import {
 export const Route = createFileRoute("/")({
     head: () => ({
         meta: [
-            { title: "Pulse HR — Smart HR Management for Modern Organizations" },
-            { name: "description", content: "All-in-one Employee Management System: attendance, leave, payroll, performance, recruitment and analytics." },
-            { property: "og:title", content: "Pulse HR — Smart HR Management" },
-            { property: "og:description", content: "All-in-one Employee Management System for modern teams." },
+            { title: "PeopleFlow HR — Workforce management for modern teams" },
+            { name: "description", content: "All-in-one workforce platform: attendance, leave, payroll, performance, recruitment and analytics." },
+            { property: "og:title", content: "PeopleFlow HR — Workforce management" },
+            { property: "og:description", content: "All-in-one workforce platform for modern teams." },
         ],
     }),
     component: Landing,
@@ -83,7 +83,7 @@ function Landing() {
                         <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-primary shadow-glow">
                             <Sparkles className="h-5 w-5 text-primary-foreground" />
                         </div>
-                        <span className="text-lg font-bold tracking-tight">Pulse<span className="text-gradient">HR</span></span>
+                        <span className="text-lg font-bold tracking-tight">PeopleFlow<span className="text-gradient">HR</span></span>
                     </Link>
                     <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
                         <a href="#features" className="hover:text-foreground transition">Features</a>
@@ -242,7 +242,7 @@ function Landing() {
                                 <Link to="/auth">Start free trial <ArrowRight className="ml-2 h-4 w-4" /></Link>
                             </Button>
                             <Button asChild size="lg" variant="outline">
-                                <a href="mailto:hello@pulsehr.app"><Mail className="mr-2 h-4 w-4" /> Talk to sales</a>
+                                <a href="mailto:hello@peopleflowhr.com"><Mail className="mr-2 h-4 w-4" /> Talk to sales</a>
                             </Button>
                         </div>
                     </div>
@@ -256,7 +256,7 @@ function Landing() {
                         <div className="grid h-7 w-7 place-items-center rounded-lg bg-gradient-primary">
                             <Sparkles className="h-3.5 w-3.5 text-primary-foreground" />
                         </div>
-                        <span>© {new Date().getFullYear()} Pulse HR. All rights reserved.</span>
+                        <span>© {new Date().getFullYear()} PeopleFlow HR. All rights reserved.</span>
                     </div>
                     <div className="flex gap-6">
                         <a href="#" className="hover:text-foreground">Privacy</a>

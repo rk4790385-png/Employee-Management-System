@@ -10,15 +10,15 @@ import {
     Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
+import { cloudAuth } from "@/integrations/cloud-auth";
 import { toast } from "sonner";
 import { Loader2, Sparkles, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/auth")({
     head: () => ({
         meta: [
-            { title: "Sign in — Pulse HR" },
-            { name: "description", content: "Sign in to your Pulse HR account." },
+            { title: "Sign in — PeopleFlow HR" },
+            { name: "description", content: "Sign in to your PeopleFlow HR account." },
         ],
     }),
     component: AuthPage,
@@ -83,7 +83,7 @@ function AuthPage() {
 
     const handleGoogle = async () => {
         setLoading(true);
-        const result = await lovable.auth.signInWithOAuth("google", {
+        const result = await cloudAuth.auth.signInWithOAuth("google", {
             redirect_uri: window.location.origin + "/dashboard",
         });
         if (result.error) {
@@ -109,8 +109,8 @@ function AuthPage() {
                             <Sparkles className="h-5 w-5 text-primary-foreground" />
                         </div>
                         <div>
-                            <div className="text-lg font-bold">Pulse<span className="text-gradient">HR</span></div>
-                            <div className="text-xs text-muted-foreground">Smart HR management</div>
+                            <div className="text-lg font-bold">PeopleFlow<span className="text-gradient">HR</span></div>
+                            <div className="text-xs text-muted-foreground">Workforce management</div>
                         </div>
                     </div>
 

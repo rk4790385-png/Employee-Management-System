@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import { Loader2, Save } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/profile")({
-    head: () => ({ meta: [{ title: "My profile — Pulse HR" }] }),
+    head: () => ({ meta: [{ title: "My profile — PeopleFlow HR" }] }),
     component: ProfilePage,
 });
 

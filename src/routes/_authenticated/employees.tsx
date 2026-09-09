@@ -11,7 +11,7 @@ import { useState } from "react";
 import { Search, Mail, Phone, Briefcase } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/employees")({
-    head: () => ({ meta: [{ title: "Employee directory — Pulse HR" }] }),
+    head: () => ({ meta: [{ title: "Employee directory — PeopleFlow HR" }] }),
     component: EmployeesPage,
 });
 

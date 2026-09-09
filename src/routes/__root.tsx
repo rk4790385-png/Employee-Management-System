@@ -10,7 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
+import { reportApplicationError } from "../lib/error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -40,7 +40,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     console.error(error);
     const router = useRouter();
     useEffect(() => {
-        reportLovableError(error, { boundary: "tanstack_root_error_component" });
+        reportApplicationError(error, { boundary: "tanstack_root_error_component" });
     }, [error]);
 
     return (
@@ -75,14 +75,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         meta: [
             { charSet: "utf-8" },
             { name: "viewport", content: "width=device-width, initial-scale=1" },
-            { title: "Pulse HR — Smart HR Management for Modern Organizations" },
-            { name: "description", content: "Enterprise-grade Employee Management System for HR teams, managers, and employees. Attendance, payroll, performance, and more." },
-            { property: "og:title", content: "Pulse HR — Smart HR Management for Modern Organizations" },
-            { property: "og:description", content: "Enterprise-grade Employee Management System for HR teams, managers, and employees. Attendance, payroll, performance, and more." },
+            { title: "PeopleFlow HR — Workforce platform for modern teams" },
+            { name: "description", content: "Enterprise-grade workforce management platform for HR teams, managers, and employees. Attendance, payroll, performance, and more." },
+            { property: "og:title", content: "PeopleFlow HR — Workforce platform for modern teams" },
+            { property: "og:description", content: "Enterprise-grade workforce management platform for HR teams, managers, and employees. Attendance, payroll, performance, and more." },
             { property: "og:type", content: "website" },
             { name: "twitter:card", content: "summary_large_image" },
-            { name: "twitter:title", content: "Pulse HR — Smart HR Management for Modern Organizations" },
-            { name: "twitter:description", content: "Enterprise-grade Employee Management System for HR teams, managers, and employees. Attendance, payroll, performance, and more." },
+            { name: "twitter:title", content: "PeopleFlow HR — Workforce platform for modern teams" },
+            { name: "twitter:description", content: "Enterprise-grade workforce management platform for HR teams, managers, and employees. Attendance, payroll, performance, and more." },
             { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/8c027879-3d66-40dd-9b65-1dcb278e9d69" },
             { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/8c027879-3d66-40dd-9b65-1dcb278e9d69" },
         ],

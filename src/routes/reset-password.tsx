@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { Loader2, Sparkles, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/reset-password")({
-    head: () => ({ meta: [{ title: "Reset password — Pulse HR" }] }),
+    head: () => ({ meta: [{ title: "Reset password — PeopleFlow HR" }] }),
     component: ResetPassword,
 });
 
@@ -41,7 +41,7 @@ function ResetPassword() {
                         <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-primary shadow-glow">
                             <Sparkles className="h-5 w-5 text-primary-foreground" />
                         </div>
-                        <div className="text-lg font-bold">Pulse<span className="text-gradient">HR</span></div>
+                        <div className="text-lg font-bold">PeopleFlow<span className="text-gradient">HR</span></div>
                     </div>
                     <h1 className="text-2xl font-bold">Set a new password</h1>
                     <p className="text-sm text-muted-foreground mt-1">Enter your new password below.</p>

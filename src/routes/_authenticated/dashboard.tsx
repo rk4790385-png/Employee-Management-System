@@ -14,7 +14,7 @@ import {
 } from "recharts";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-    head: () => ({ meta: [{ title: "Dashboard — Pulse HR" }] }),
+    head: () => ({ meta: [{ title: "Dashboard — PeopleFlow HR" }] }),
     component: DashboardPage,
 });
 

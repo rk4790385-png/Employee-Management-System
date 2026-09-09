@@ -56,7 +56,7 @@ export function AppSidebar({ role }: { role: AppRole | null }) {
                     </div>
                     {!collapsed && (
                         <div className="min-w-0">
-                            <div className="font-bold truncate">Pulse<span className="text-gradient">HR</span></div>
+                            <div className="font-bold truncate">PeopleFlow<span className="text-gradient">HR</span></div>
                             <div className="text-[10px] uppercase tracking-wider text-muted-foreground truncate">
                                 {role === "admin" ? "Admin workspace" : role === "hr_manager" ? "HR workspace" : "Employee workspace"}
                             </div>
