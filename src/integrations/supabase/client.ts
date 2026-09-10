@@ -2,20 +2,275 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-function createSupabaseClient() {
-    // Use import.meta.env for client-side (Vite build-time replacement)
-    // Fall back to process.env for SSR (server-side rendering)
-    const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-    const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY;
+function normalizeSupabaseValue(value: string | undefined): string | undefined {
+    if (typeof value !== 'string') return undefined;
 
-    if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-        const missing = [
-            ...(!SUPABASE_URL ? ['SUPABASE_URL'] : []),
-            ...(!SUPABASE_PUBLISHABLE_KEY ? ['SUPABASE_PUBLISHABLE_KEY'] : []),
-        ];
-        const message = `Missing Supabase environment variable(s): ${missing.join(', ')}. Add them to your deployment environment.`;
-        console.error(`[Supabase] ${message}`);
-        throw new Error(message);
+    const trimmed = value.trim();
+    if (!trimmed || trimmed === 'undefined' || trimmed === 'null') {
+        return undefined;
+    }
+
+    return trimmed;
+}
+
+function readSupabaseConfigValue(...values: Array<string | undefined>) {
+    for (const value of values) {
+        const normalized = normalizeSupabaseValue(value);
+        if (normalized) return normalized;
+    }
+
+    return undefined;
+}
+
+function isValidSupabaseUrl(value: string | undefined): value is string {
+    if (!value) return false;
+
+    try {
+        const url = new URL(value);
+        return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch {
+        return false;
+    }
+}
+
+export function hasSupabaseConfig() {
+    const SUPABASE_URL = readSupabaseConfigValue(import.meta.env.VITE_SUPABASE_URL, process.env.SUPABASE_URL);
+    const SUPABASE_PUBLISHABLE_KEY = readSupabaseConfigValue(import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, process.env.SUPABASE_PUBLISHABLE_KEY);
+    return Boolean(isValidSupabaseUrl(SUPABASE_URL) && SUPABASE_PUBLISHABLE_KEY);
+}
+
+const demoUser = {
+    id: 'demo-user',
+    email: 'demo@peopleflow.local',
+    app_metadata: { provider: 'demo' },
+    user_metadata: { full_name: 'Demo Admin', role: 'admin' },
+    aud: 'authenticated',
+    created_at: new Date().toISOString(),
+};
+
+const demoDepartments = [
+    { id: 'dept-hr', name: 'Human Resources' },
+    { id: 'dept-eng', name: 'Engineering' },
+    { id: 'dept-sales', name: 'Sales' },
+    { id: 'dept-ops', name: 'Operations' },
+];
+
+const demoProfiles = [
+    {
+        id: 'demo-user',
+        full_name: 'Demo Admin',
+        email: 'demo@peopleflow.local',
+        employee_id: 'PF-1001',
+        designation: 'HR Director',
+        phone: '+1 (555) 018-2048',
+        joining_date: '2024-01-15',
+        employment_status: 'active',
+        avatar_url: null,
+        department_id: 'dept-hr',
+        created_at: '2024-01-15T00:00:00.000Z',
+    },
+    {
+        id: 'emp-2',
+        full_name: 'Ava Patel',
+        email: 'ava.patel@peopleflow.local',
+        employee_id: 'PF-1002',
+        designation: 'Senior Product Designer',
+        phone: '+1 (555) 018-2002',
+        joining_date: '2023-07-06',
+        employment_status: 'active',
+        avatar_url: null,
+        department_id: 'dept-eng',
+        created_at: '2023-07-06T00:00:00.000Z',
+    },
+    {
+        id: 'emp-3',
+        full_name: 'Marcus Lee',
+        email: 'marcus.lee@peopleflow.local',
+        employee_id: 'PF-1003',
+        designation: 'Account Executive',
+        phone: '+1 (555) 018-2003',
+        joining_date: '2024-03-12',
+        employment_status: 'active',
+        avatar_url: null,
+        department_id: 'dept-sales',
+        created_at: '2024-03-12T00:00:00.000Z',
+    },
+    {
+        id: 'emp-4',
+        full_name: 'Nina Gomez',
+        email: 'nina.gomez@peopleflow.local',
+        employee_id: 'PF-1004',
+        designation: 'Operations Manager',
+        phone: '+1 (555) 018-2004',
+        joining_date: '2023-11-22',
+        employment_status: 'active',
+        avatar_url: null,
+        department_id: 'dept-ops',
+        created_at: '2023-11-22T00:00:00.000Z',
+    },
+];
+
+function createDemoQuery<T>(records: T[] | null, options?: { single?: boolean; update?: (entries: T[], payload: Record<string, unknown>) => T[] }) {
+    const state = {
+        filters: [] as Array<(entry: T) => boolean>,
+        order: undefined as { column: string; ascending: boolean } | undefined,
+    };
+
+    const apply = () => {
+        let filtered = [...(records ?? [])];
+
+        for (const predicate of state.filters) {
+            filtered = filtered.filter(predicate);
+        }
+
+        if (state.order) {
+            filtered = [...filtered].sort((a: any, b: any) => {
+                const aValue = a?.[state.order!.column];
+                const bValue = b?.[state.order!.column];
+                const result = String(aValue ?? '').localeCompare(String(bValue ?? ''));
+                return state.order!.ascending ? result : -result;
+            });
+        }
+
+        return filtered;
+    };
+
+    const query: any = {
+        select: () => query,
+        eq: (column: string, value: unknown) => {
+            state.filters.push((entry: any) => entry?.[column] === value);
+            return query;
+        },
+        order: (column: string, direction?: { ascending?: boolean }) => {
+            state.order = { column, ascending: direction?.ascending ?? true };
+            return query;
+        },
+        maybeSingle: () => Promise.resolve({ data: apply()[0] ?? null, error: null }),
+        update: (payload: Record<string, unknown>) => {
+            const current = records ?? [];
+            const updated = options?.update ? options.update(current, payload) : current;
+            return Promise.resolve({ data: updated, error: null });
+        },
+        then: (onFulfilled: (value: { data: T[]; error: null }) => unknown, onRejected?: (reason: unknown) => unknown) => {
+            return Promise.resolve({ data: apply(), error: null }).then(onFulfilled, onRejected);
+        },
+    };
+
+    return query;
+}
+
+function createDemoAuth() {
+    const readSession = () => {
+        const raw = typeof window === 'undefined' ? null : window.localStorage.getItem('peopleflow-demo-session');
+        if (!raw) return null;
+
+        try {
+            return JSON.parse(raw) as { user: typeof demoUser; access_token: string };
+        } catch {
+            return null;
+        }
+    };
+
+    const setSession = (session: { user?: typeof demoUser; access_token?: string } | null) => {
+        if (typeof window === 'undefined') return;
+        if (!session) {
+            window.localStorage.removeItem('peopleflow-demo-session');
+            return;
+        }
+        window.localStorage.setItem(
+            'peopleflow-demo-session',
+            JSON.stringify({ user: session.user ?? demoUser, access_token: session.access_token ?? 'demo-token' }),
+        );
+    };
+
+    return {
+        getSession: async () => {
+            const session = readSession();
+            return { data: { session: session ? { access_token: session.access_token, user: session.user } : null }, error: null };
+        },
+        getUser: async () => {
+            const session = readSession();
+            return { data: { user: session?.user ?? demoUser }, error: null };
+        },
+        onAuthStateChange: (callback: (event: string, session: { user: typeof demoUser; access_token: string } | null) => void) => {
+            const session = readSession();
+            callback('SIGNED_IN', session ?? { user: demoUser, access_token: 'demo-token' });
+            return { data: { subscription: { unsubscribe: () => undefined } } };
+        },
+        signInWithPassword: async ({ email, password }: { email: string; password: string }) => {
+            if (!email || !password) {
+                return { error: { message: 'Demo mode requires a valid email and password.' } };
+            }
+            const user = { ...demoUser, email };
+            setSession({ user, access_token: 'demo-token' });
+            return { error: null };
+        },
+        signUp: async ({ email, password, options }: { email: string; password: string; options?: { data?: Record<string, unknown> } }) => {
+            if (!email || !password) {
+                return { error: { message: 'Demo mode requires a valid email and password.' } };
+            }
+            const user = {
+                ...demoUser,
+                email,
+                user_metadata: { ...(options?.data ?? {}), full_name: (options?.data?.full_name as string) ?? 'Demo User', role: (options?.data?.role as string) ?? 'employee' },
+            };
+            setSession({ user, access_token: 'demo-token' });
+            return { error: null };
+        },
+        resetPasswordForEmail: async () => ({ error: null }),
+        updateUser: async () => ({ error: null }),
+        setSession: async (session: { access_token?: string; user?: typeof demoUser } | null) => {
+            setSession(session ?? null);
+            return { data: { user: session?.user ?? null }, error: null };
+        },
+        signOut: async () => {
+            setSession(null);
+            return { error: null };
+        },
+    };
+}
+
+function createDemoSupabaseClient() {
+    const auth = createDemoAuth();
+    const database = {
+        from: (table: string) => {
+            if (table === 'departments') {
+                return createDemoQuery(demoDepartments);
+            }
+
+            if (table === 'user_roles') {
+                return createDemoQuery([{ user_id: demoUser.id, role: 'admin' }]);
+            }
+
+            if (table === 'profiles') {
+                return createDemoQuery(demoProfiles, {
+                    single: true,
+                    update: (entries, payload) => {
+                        const next = [...entries];
+                        const idx = next.findIndex((entry) => entry.id === demoUser.id);
+                        if (idx >= 0) next[idx] = { ...next[idx], ...payload, id: demoUser.id };
+                        return next;
+                    },
+                });
+            }
+
+            return createDemoQuery([]);
+        },
+    };
+
+    return {
+        auth,
+        ...database,
+    };
+}
+
+function createSupabaseClient() {
+    const SUPABASE_URL = readSupabaseConfigValue(import.meta.env.VITE_SUPABASE_URL, process.env.SUPABASE_URL);
+    const SUPABASE_PUBLISHABLE_KEY = readSupabaseConfigValue(import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, process.env.SUPABASE_PUBLISHABLE_KEY);
+
+    if (!isValidSupabaseUrl(SUPABASE_URL) || !SUPABASE_PUBLISHABLE_KEY) {
+        console.warn('[Supabase] No valid configuration detected. Starting in demo mode.');
+        return createDemoSupabaseClient() as unknown as ReturnType<typeof createSupabaseClient>;
     }
 
     return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {

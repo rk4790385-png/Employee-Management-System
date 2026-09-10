@@ -5,16 +5,38 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-function createSupabaseAdminClient() {
-    const SUPABASE_URL = process.env.SUPABASE_URL;
-    const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+function normalizeSupabaseValue(value: string | undefined): string | undefined {
+    if (typeof value !== 'string') return undefined;
 
-    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+    const trimmed = value.trim();
+    if (!trimmed || trimmed === 'undefined' || trimmed === 'null') {
+        return undefined;
+    }
+
+    return trimmed;
+}
+
+function isValidSupabaseUrl(value: string | undefined): value is string {
+    if (!value) return false;
+
+    try {
+        const url = new URL(value);
+        return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch {
+        return false;
+    }
+}
+
+function createSupabaseAdminClient() {
+    const SUPABASE_URL = normalizeSupabaseValue(process.env.SUPABASE_URL);
+    const SUPABASE_SERVICE_ROLE_KEY = normalizeSupabaseValue(process.env.SUPABASE_SERVICE_ROLE_KEY);
+
+    if (!isValidSupabaseUrl(SUPABASE_URL) || !SUPABASE_SERVICE_ROLE_KEY) {
         const missing = [
-            ...(!SUPABASE_URL ? ['SUPABASE_URL'] : []),
+            ...(!isValidSupabaseUrl(SUPABASE_URL) ? ['SUPABASE_URL'] : []),
             ...(!SUPABASE_SERVICE_ROLE_KEY ? ['SUPABASE_SERVICE_ROLE_KEY'] : []),
         ];
-        const message = `Missing Supabase environment variable(s): ${missing.join(', ')}. Add them to your deployment environment.`;
+        const message = `Missing or invalid Supabase environment variable(s): ${missing.join(', ')}. Add valid values to your deployment environment.`;
         console.error(`[Supabase] ${message}`);
         throw new Error(message);
     }

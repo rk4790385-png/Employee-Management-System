@@ -76,74 +76,76 @@ const faqs = [
 function Landing() {
     return (
         <div className="min-h-screen bg-background text-foreground">
-            {/* Nav */}
-            <header className="sticky top-0 z-40 border-b border-border/40 backdrop-blur-xl bg-background/60">
+            <header className="sticky top-0 z-40 border-b border-border/40 bg-background/70 backdrop-blur-xl">
                 <div className="container mx-auto flex h-16 items-center justify-between px-4">
                     <Link to="/" className="flex items-center gap-2">
                         <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-primary shadow-glow">
                             <Sparkles className="h-5 w-5 text-primary-foreground" />
                         </div>
-                        <span className="text-lg font-bold tracking-tight">PeopleFlow<span className="text-gradient">HR</span></span>
+                        <span className="text-lg font-bold tracking-tight text-white">PeopleFlow<span className="text-gradient">HR</span></span>
                     </Link>
-                    <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-                        <a href="#features" className="hover:text-foreground transition">Features</a>
-                        <a href="#benefits" className="hover:text-foreground transition">Benefits</a>
-                        <a href="#testimonials" className="hover:text-foreground transition">Customers</a>
-                        <a href="#faq" className="hover:text-foreground transition">FAQ</a>
+                    <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
+                        <a href="#features" className="transition hover:text-foreground">Features</a>
+                        <a href="#benefits" className="transition hover:text-foreground">Benefits</a>
+                        <a href="#testimonials" className="transition hover:text-foreground">Customers</a>
+                        <a href="#faq" className="transition hover:text-foreground">FAQ</a>
                     </nav>
                     <div className="flex items-center gap-2">
                         <Button asChild variant="ghost" size="sm"><Link to="/auth">Sign in</Link></Button>
-                        <Button asChild size="sm" className="bg-gradient-primary shadow-glow"><Link to="/auth">Get started</Link></Button>
+                        <Button asChild size="sm" className="bg-gradient-primary shadow-glow text-primary-foreground"><Link to="/auth">Launch app</Link></Button>
                     </div>
                 </div>
             </header>
 
-            {/* Hero */}
             <section className="relative overflow-hidden bg-hero">
-                <div className="container mx-auto px-4 py-24 md:py-32 text-center">
-                    <Badge variant="outline" className="mb-6 border-primary/40 text-primary bg-primary/10">
-                        <Sparkles className="mr-1.5 h-3 w-3" /> Now with AI-powered performance reviews
+                <div className="absolute inset-0 opacity-40" aria-hidden="true">
+                    <div className="absolute left-1/2 top-10 h-72 w-72 -translate-x-1/2 rounded-full bg-primary/20 blur-3xl" />
+                    <div className="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-[#ffb454]/20 blur-3xl" />
+                </div>
+                <div className="container relative mx-auto px-4 py-24 text-center md:py-32">
+                    <Badge variant="outline" className="mb-6 border-primary/40 bg-primary/10 text-primary">
+                        <Sparkles className="mr-1.5 h-3 w-3" /> Demo-ready workforce platform
                     </Badge>
-                    <h1 className="mx-auto max-w-4xl text-5xl md:text-7xl font-black tracking-tight leading-[1.05]">
-                        Smart HR management for <span className="text-gradient">modern organizations</span>
+                    <h1 className="mx-auto max-w-5xl text-5xl font-black tracking-[-0.06em] text-white md:text-7xl">
+                        Build a calmer,
+                        <span className="text-gradient block">smarter people system.</span>
                     </h1>
-                    <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-                        One enterprise-grade platform for attendance, leave, payroll, performance, and people analytics — used by teams from startups to the Fortune 500.
+                    <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">
+                        Pulse your workforce with attendance, payroll, hiring, performance, and secure employee moments — everything in one elegant command center.
                     </p>
                     <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-                        <Button asChild size="lg" className="bg-gradient-primary shadow-glow">
-                            <Link to="/auth">Get Started <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                        <Button asChild size="lg" className="bg-gradient-primary shadow-glow text-primary-foreground">
+                            <Link to="/auth">Start free <ArrowRight className="ml-2 h-4 w-4" /></Link>
                         </Button>
-                        <Button asChild size="lg" variant="outline">
-                            <Link to="/auth">Employee Login</Link>
+                        <Button asChild size="lg" variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">
+                            <Link to="/auth">Employee portal</Link>
                         </Button>
-                        <Button asChild size="lg" variant="outline">
-                            <Link to="/auth">HR Login</Link>
+                        <Button asChild size="lg" variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">
+                            <Link to="/auth">HR workspace</Link>
                         </Button>
                     </div>
 
-                    <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="mt-20 grid grid-cols-2 gap-4 md:grid-cols-4">
                         {stats.map((s) => (
-                            <Card key={s.label} className="glass p-6 text-center">
-                                <div className="text-3xl md:text-4xl font-bold text-gradient">{s.value}</div>
-                                <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{s.label}</div>
+                            <Card key={s.label} className="glass border-white/10 bg-slate-950/30 p-6 text-center text-white">
+                                <div className="text-3xl font-black md:text-4xl text-gradient">{s.value}</div>
+                                <div className="mt-2 text-[11px] uppercase tracking-[0.22em] text-slate-300">{s.label}</div>
                             </Card>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* Features */}
             <section id="features" className="container mx-auto px-4 py-24">
-                <div className="text-center mb-16">
-                    <Badge variant="outline" className="mb-3">Features</Badge>
-                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Everything HR needs. Nothing it doesn't.</h2>
-                    <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">A complete suite covering the entire employee lifecycle — from hire to retire.</p>
+                <div className="mb-16 text-center">
+                    <Badge variant="outline" className="mb-3 border-primary/40 bg-primary/10 text-primary">Capabilities</Badge>
+                    <h2 className="text-4xl font-bold tracking-tight md:text-5xl">One platform for the full employee lifecycle.</h2>
+                    <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">Manage the people, processes, and moments that matter—without the spreadsheet chaos.</p>
                 </div>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {features.map((f) => (
-                        <Card key={f.title} className="glass p-7 group hover:shadow-glow transition-all duration-300">
-                            <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-primary mb-5 group-hover:scale-110 transition-transform">
+                        <Card key={f.title} className="glass group p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-glow">
+                            <div className="mb-5 grid h-12 w-12 place-items-center rounded-xl bg-gradient-primary shadow-glow group-hover:scale-105">
                                 <f.icon className="h-6 w-6 text-primary-foreground" />
                             </div>
                             <h3 className="text-xl font-semibold">{f.title}</h3>
@@ -153,17 +155,16 @@ function Landing() {
                 </div>
             </section>
 
-            {/* Benefits */}
             <section id="benefits" className="container mx-auto px-4 py-24">
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="grid items-center gap-12 lg:grid-cols-2">
                     <div>
-                        <Badge variant="outline" className="mb-3">Why Pulse HR</Badge>
-                        <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Built for people teams that want to move fast.</h2>
-                        <p className="mt-4 text-muted-foreground">Replace your patchwork of spreadsheets and legacy HRIS with a single platform that scales from 10 to 10,000+ employees.</p>
-                        <div className="mt-8 grid sm:grid-cols-2 gap-3">
+                        <Badge variant="outline" className="mb-3 border-primary/40 bg-primary/10 text-primary">Why teams switch</Badge>
+                        <h2 className="text-4xl font-bold tracking-tight md:text-5xl">A command center for every employee experience.</h2>
+                        <p className="mt-4 text-muted-foreground">Replace disconnected tools with one operating layer for hiring, onboarding, approvals, performance, and planning.</p>
+                        <div className="mt-8 grid gap-3 sm:grid-cols-2">
                             {benefits.map((b) => (
-                                <div key={b} className="flex items-start gap-3">
-                                    <div className="mt-1 grid h-5 w-5 place-items-center rounded-full bg-success/20 text-success">✓</div>
+                                <div key={b} className="flex items-start gap-3 rounded-2xl border border-border/80 bg-card/50 p-3">
+                                    <div className="mt-1 grid h-5 w-5 place-items-center rounded-full bg-success/15 text-success">✓</div>
                                     <span className="text-sm">{b}</span>
                                 </div>
                             ))}
@@ -177,14 +178,14 @@ function Landing() {
                                 { icon: Clock, label: "Avg. approval time", value: "3.2 hrs" },
                                 { icon: Wallet, label: "Payroll on time", value: "100%" },
                             ].map((r) => (
-                                <div key={r.label} className="flex items-center justify-between rounded-xl border border-border/60 p-4">
+                                <div key={r.label} className="flex items-center justify-between rounded-2xl border border-border/70 bg-background/40 p-4">
                                     <div className="flex items-center gap-3">
-                                        <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary/15 text-primary">
+                                        <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-primary text-primary-foreground shadow-glow">
                                             <r.icon className="h-5 w-5" />
                                         </div>
                                         <span className="text-sm text-muted-foreground">{r.label}</span>
                                     </div>
-                                    <span className="font-semibold">{r.value}</span>
+                                    <span className="text-base font-semibold">{r.value}</span>
                                 </div>
                             ))}
                         </div>
@@ -192,13 +193,12 @@ function Landing() {
                 </div>
             </section>
 
-            {/* Testimonials */}
             <section id="testimonials" className="container mx-auto px-4 py-24">
-                <div className="text-center mb-12">
-                    <Badge variant="outline" className="mb-3">Loved by HR teams</Badge>
-                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Trusted by 10,000+ companies</h2>
+                <div className="mb-12 text-center">
+                    <Badge variant="outline" className="mb-3 border-primary/40 bg-primary/10 text-primary">Loved by people teams</Badge>
+                    <h2 className="text-4xl font-bold tracking-tight md:text-5xl">Built for teams that move fast.</h2>
                 </div>
-                <div className="grid md:grid-cols-3 gap-6">
+                <div className="grid gap-6 md:grid-cols-3">
                     {testimonials.map((t) => (
                         <Card key={t.name} className="glass p-7">
                             <div className="flex gap-1 text-warning">
@@ -214,54 +214,52 @@ function Landing() {
                 </div>
             </section>
 
-            {/* FAQ */}
-            <section id="faq" className="container mx-auto px-4 py-24 max-w-3xl">
-                <div className="text-center mb-10">
-                    <Badge variant="outline" className="mb-3">FAQ</Badge>
-                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Questions, answered.</h2>
+            <section id="faq" className="container mx-auto max-w-3xl px-4 py-24">
+                <div className="mb-10 text-center">
+                    <Badge variant="outline" className="mb-3 border-primary/40 bg-primary/10 text-primary">FAQ</Badge>
+                    <h2 className="text-4xl font-bold tracking-tight md:text-5xl">Questions, answered.</h2>
                 </div>
                 <Accordion type="single" collapsible className="space-y-3">
                     {faqs.map((f, i) => (
-                        <AccordionItem key={i} value={`item-${i}`} className="glass rounded-xl px-5 border-0">
-                            <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
-                            <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
+                        <AccordionItem key={i} value={`item-${i}`} className="rounded-2xl border border-border bg-card/60 px-4">
+                            <AccordionTrigger className="py-4 text-left text-base font-medium">{f.q}</AccordionTrigger>
+                            <AccordionContent className="pb-4 text-sm text-muted-foreground">{f.a}</AccordionContent>
                         </AccordionItem>
                     ))}
                 </Accordion>
             </section>
 
-            {/* Contact / CTA */}
-            <section className="container mx-auto px-4 py-24">
-                <Card className="glass p-12 text-center shadow-card overflow-hidden relative">
-                    <div className="absolute inset-0 bg-hero opacity-60 pointer-events-none" />
-                    <div className="relative">
-                        <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Ready to modernise your HR?</h2>
-                        <p className="mt-4 text-muted-foreground max-w-xl mx-auto">Join thousands of teams running people operations on Pulse HR.</p>
-                        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-                            <Button asChild size="lg" className="bg-gradient-primary shadow-glow">
-                                <Link to="/auth">Start free trial <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            <section className="container mx-auto px-4 pb-24">
+                <Card className="glass overflow-hidden p-8 md:p-12">
+                    <div className="flex flex-col items-center justify-between gap-6 text-center md:flex-row md:text-left">
+                        <div>
+                            <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">Launch faster</p>
+                            <h2 className="mt-2 text-3xl font-bold md:text-4xl">Ready to modernize your HR stack?</h2>
+                        </div>
+                        <div className="flex flex-wrap gap-3">
+                            <Button asChild size="lg" className="bg-gradient-primary text-primary-foreground shadow-glow">
+                                <Link to="/auth">Start free <ArrowRight className="ml-2 h-4 w-4" /></Link>
                             </Button>
                             <Button asChild size="lg" variant="outline">
-                                <a href="mailto:hello@peopleflowhr.com"><Mail className="mr-2 h-4 w-4" /> Talk to sales</a>
+                                <a href="mailto:hello@peopleflowhr.com">Talk to sales</a>
                             </Button>
                         </div>
                     </div>
                 </Card>
             </section>
 
-            {/* Footer */}
-            <footer className="border-t border-border/40 mt-12">
-                <div className="container mx-auto px-4 py-10 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+            <footer className="border-t border-border/60 bg-background/90">
+                <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 py-8 text-sm text-muted-foreground md:flex-row">
                     <div className="flex items-center gap-2">
-                        <div className="grid h-7 w-7 place-items-center rounded-lg bg-gradient-primary">
-                            <Sparkles className="h-3.5 w-3.5 text-primary-foreground" />
+                        <div className="grid h-7 w-7 place-items-center rounded-lg bg-gradient-primary shadow-glow">
+                            <Sparkles className="h-4 w-4 text-primary-foreground" />
                         </div>
-                        <span>© {new Date().getFullYear()} PeopleFlow HR. All rights reserved.</span>
+                        © 2026 PeopleFlow HR. All rights reserved.
                     </div>
-                    <div className="flex gap-6">
-                        <a href="#" className="hover:text-foreground">Privacy</a>
-                        <a href="#" className="hover:text-foreground">Terms</a>
-                        <a href="#" className="hover:text-foreground">Security</a>
+                    <div className="flex items-center gap-4">
+                        <a href="#" className="transition hover:text-foreground">Privacy</a>
+                        <a href="#" className="transition hover:text-foreground">Terms</a>
+                        <a href="#" className="transition hover:text-foreground">Security</a>
                     </div>
                 </div>
             </footer>
